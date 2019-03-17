@@ -1,9 +1,9 @@
 
 
-#🔊**Decibel: Real-time Noise level Measurement**
+# 🔊**Decibel: Real-time Noise level Measurement**
 
 
-##**Inspiration**
+## **Inspiration**
 -The city life is not only fast but extremely draining due to the constant noise, be it in traffic or due to ever present construction.
 -High noise is extremely deterrent to a healthy life and it causes issues like lack of sleep, migraines and difficulty in concentration.
 -Decibel helps us to use the mobile as a sensor, here we implement noise levels, but the functionality could extend to any attributes that the mobile is capable of recording. (for example: using the camera, accelerometer, gyroscope, etc)  
