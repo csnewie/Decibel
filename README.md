@@ -18,17 +18,18 @@ Processing on cloud(Firebase)
 
 #Demo
 Messages getting published to Cloud MQTT upon recording
-![alt text]
+![alt text](https://github.com/Mphis/Decibel/blob/master/websocket.png)
+
 
 
 Data getting sent to Firebase from Cloud MQTT 
-
+![alt text](https://github.com/Mphis/Decibel/blob/master/mqtt.png)
 
 
 
 
 Email sent as alert .. because decibel level is high
-
+![alt text](https://github.com/Mphis/Decibel/blob/master/email.png)
 
 #Usage/ Architecture
 The user starts the Sound Recording with a button.
@@ -37,6 +38,8 @@ Measured db levels are sent to be stored on the MQTT cloud
 The db levels are categorized and sorted in Firebase.
 If the noise levels are hazardous for human-beings or other fauna, the concerned authorities will be notified.
 Notifications will be sent in the form of emails through firebase.
+
+![alt text](https://github.com/Mphis/Decibel/blob/master/architecture.png)
 
 
 
