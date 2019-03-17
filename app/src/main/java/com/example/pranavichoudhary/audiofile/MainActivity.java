@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
+import android.location.Location;
+
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallbackExtended;
@@ -35,8 +37,20 @@ import java.util.Locale;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import helpers.MqttHelper;
+import helpers.WavFile;
+
 
 public class MainActivity extends AppCompatActivity {
+
+
+    public static Location loc;
+
+
+
+    static String wavfileName = "";
+
+    static Double lon;
+    static Double lat;
 
     static MqttHelper mqttHelper;
 
@@ -50,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // check if GPS enabled
+
+
 
         dataReceived = (TextView) findViewById(R.id.dataReceived);
 
@@ -91,6 +109,57 @@ public class MainActivity extends AppCompatActivity {
             recordTask = new RecordWaveTask(this);
         } else {
             recordTask.setContext(this);
+        }
+
+    }
+
+    public static void calculateDB(String str){
+        double dB;
+        try
+        {
+            // Open the wav file specified as the first argument
+            WavFile wavFile = WavFile.openWavFile(new File(str));
+
+            // Display information about the wav file
+            //wavFile.display();
+
+            // Get the number of audio channels in the wav file
+            int numChannels = wavFile.getNumChannels();
+
+            // Create a buffer of 100 frames
+            double[] buffer = new double[100 * numChannels];
+
+            int framesRead;
+
+            double max = Double.MIN_VALUE;
+
+            do
+            {
+                // Read frames into buffer
+                framesRead = wavFile.readFrames(buffer, 100);
+
+                // Loop through frames and look for minimum and maximum value
+                for (int s=0 ; s<framesRead * numChannels ; s++)
+                {
+                    if (buffer[s] > max) max = buffer[s];
+                }
+            }
+            while (framesRead != 0);
+
+            // Close the wavFile
+            wavFile.close();
+
+            System.out.println(max);
+            dB = 20 * Math.log10(max);
+            System.out.println(dB);
+
+            mqttHelper.publishMessage(Double.toString(Math.abs(dB)));
+
+
+        }
+        catch (Exception e)
+        {
+            System.err.println(e);
         }
 
     }
@@ -203,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
                 wavOut = new FileOutputStream(files[0]);
 
                 // Write out the wav file header
-                //writeWavHeader(wavOut, CHANNEL_MASK, SAMPLE_RATE, ENCODING);
+                writeWavHeader(wavOut, CHANNEL_MASK, SAMPLE_RATE, ENCODING);
 
                 // Avoiding loop allocations
                 byte[] buffer = new byte[BUFFER_SIZE];
@@ -234,7 +303,6 @@ public class MainActivity extends AppCompatActivity {
                 String line = null;
                 while ((line = br.readLine()) != null) {
                     System.out.println(line);
-                    mqttHelper.publishMessage(line);
                 }
 
             } catch (IOException ex) {
@@ -272,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException ex) {
                 return new Object[]{ex};
             }
-
+            calculateDB(files[0]+"");
             return new Object[]{files[0].length(), endTime - startTime};
         }
 
