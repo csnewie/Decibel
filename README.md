@@ -1,9 +1,9 @@
-# Decibel
-
-🔊**Decibel: Real-time Noise level Measurement**
 
 
-**Inspiration**
+#🔊**Decibel: Real-time Noise level Measurement**
+
+
+##**Inspiration**
 -The city life is not only fast but extremely draining due to the constant noise, be it in traffic or due to ever present construction.
 -High noise is extremely deterrent to a healthy life and it causes issues like lack of sleep, migraines and difficulty in concentration.
 -Decibel helps us to use the mobile as a sensor, here we implement noise levels, but the functionality could extend to any attributes that the mobile is capable of recording. (for example: using the camera, accelerometer, gyroscope, etc)  
@@ -23,7 +23,7 @@
 
 
 
-**-*Data getting sent to Firebase from Cloud MQTT *-**
+**-*Data getting sent to Firebase from Cloud MQTT*-**
 
 ![alt text](https://github.com/Mphis/Decibel/blob/master/mqtt.png)
 
@@ -35,6 +35,7 @@
 ![alt text](https://github.com/Mphis/Decibel/blob/master/email.png)
 
 **Usage/ Architecture**
+
 -The user starts the Sound Recording with a button.
 -The noise is processed in the app and the db levels are measured, along with getting the location.
 -Measured db levels are sent to be stored on the MQTT cloud
