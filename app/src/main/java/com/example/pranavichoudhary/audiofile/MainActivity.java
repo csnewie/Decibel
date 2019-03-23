@@ -3,6 +3,7 @@ package com.example.pranavichoudhary.audiofile;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
@@ -30,6 +31,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Locale;
@@ -40,17 +42,18 @@ import helpers.MqttHelper;
 import helpers.WavFile;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Serializable {
 
 
     public static Location loc;
-
-
 
     static String wavfileName = "";
 
     static Double lon;
     static Double lat;
+    static int brightness ;
+static int flag = 0 ;
+
 
     static MqttHelper mqttHelper;
 
@@ -72,8 +75,29 @@ public class MainActivity extends AppCompatActivity {
         dataReceived = (TextView) findViewById(R.id.dataReceived);
 
 
+
+
         startMqtt();
 
+         findViewById(com.example.pranavichoudhary.audiofile.R.id.takePic).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                flag = 1 ;
+                startActivity(new Intent(MainActivity.this, Main2Activity.class));
+            }
+
+             //just uhh randomly retrieving the brigthness here .. coz why not :)
+
+         });
+
+         if(flag == 1){
+             Intent intent = getIntent();
+             brightness = (Integer) intent.getSerializableExtra("brightness");
+flag= 0 ;
+         }
+         else {
+             brightness = 0 ;
+         }
         //noinspection ConstantConditions
         findViewById(R.id.btnStart).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -152,8 +176,13 @@ public class MainActivity extends AppCompatActivity {
             System.out.println(max);
             dB = 20 * Math.log10(max);
             System.out.println(dB);
+//
+//
+//            //just uhh randomly retrieving the brigthness here .. coz why not :)
+//            Intent intent = getIntent();
+//         brightness = (Integer) intent.getSerializableExtra("brightness");
 
-            mqttHelper.publishMessage(Double.toString(Math.abs(dB)));
+            mqttHelper.publishMessage(Double.toString(Math.abs(dB))+" "+Integer.toString(brightness));
 
 
         }

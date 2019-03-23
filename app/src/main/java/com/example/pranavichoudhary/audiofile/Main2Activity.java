@@ -22,7 +22,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class Main2Activity extends AppCompatActivity {
+import java.io.Serializable;
+
+public class Main2Activity extends AppCompatActivity implements Serializable {
 
 
     Button button ;
@@ -36,7 +38,7 @@ public class Main2Activity extends AppCompatActivity {
         @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.content_main2);
+        setContentView(R.layout.activity_main2);
 
         button = (Button)findViewById(R.id.button);
         imageView = (ImageView)findViewById(R.id.imageView);
@@ -45,7 +47,7 @@ public class Main2Activity extends AppCompatActivity {
 
         reso=getBackCameraResolutionInMp();
 
-        if(reso<8.0) {
+        if(reso<5.0) {
 
             Toast.makeText(Main2Activity.this,"Camera quality not good.", Toast.LENGTH_LONG).show();
             button.setEnabled(false);
@@ -75,6 +77,10 @@ public class Main2Activity extends AppCompatActivity {
 
             bright=calculateBrightnessEstimate(bitmap, 1); //values b/w 0 and 255 0:dark 255:white
             Toast.makeText(Main2Activity.this,"Brightness:"+bright, Toast.LENGTH_LONG).show();
+
+            Intent intent = new Intent(Main2Activity.this, MainActivity.class);
+            intent.putExtra("brightness", bright);
+            startActivity(intent);
 
         }
     }
